@@ -1,4 +1,4 @@
-"""Compatibility shim for the semantic planner."""
+"""Planning components for chunk construction."""
 
 from lexrag.ingestion.chunker.planning.block_aware_semantic_planner import (
     BlockAwareSemanticPlanner,

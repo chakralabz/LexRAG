@@ -7,6 +7,9 @@ from typing import Any
 
 from pydantic import AliasChoices, BaseModel, ConfigDict, Field
 
+from lexrag.ingestion.chunker.config.chunk_type import ChunkType
+from lexrag.ingestion.chunker.config.chunking_strategy import ChunkingStrategy
+
 
 class ChunkMetadata(BaseModel):
     """Audit-safe metadata attached to every chunk.
@@ -87,8 +90,8 @@ class ChunkMetadata(BaseModel):
         validation_alias=AliasChoices("section_path", "parent_section_path"),
     )
     heading_anchor: str | None = Field(default=None)
-    chunk_type: str = Field(default="paragraph")
-    chunking_strategy: str = Field(default="unspecified")
+    chunk_type: ChunkType = Field(default=ChunkType.PARAGRAPH)
+    chunking_strategy: ChunkingStrategy = Field(default=ChunkingStrategy.UNSPECIFIED)
     token_count: int | None = Field(default=None, ge=0)
     char_count: int | None = Field(default=None, ge=0)
     overlap_prev: bool = Field(default=False)

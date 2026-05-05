@@ -5,6 +5,7 @@ from __future__ import annotations
 from lexrag.ingestion.chunker.schemas.chunk import Chunk
 from lexrag.ingestion.chunker.schemas.chunk_metadata import ChunkMetadata
 from lexrag.ingestion.chunker.schemas.chunking_config import ChunkingConfig
+from lexrag.ingestion.chunker.tokenization_engine import TokenizationEngine
 
 
 class ChunkPostProcessor:
@@ -15,8 +16,14 @@ class ChunkPostProcessor:
     enrichment so the builder can stay focused on segmentation concerns.
     """
 
-    def __init__(self, *, config: ChunkingConfig) -> None:
+    def __init__(
+        self,
+        *,
+        config: ChunkingConfig,
+        tokenization_engine: TokenizationEngine | None = None,
+    ) -> None:
         self.config = config
+        self.tokenization_engine = tokenization_engine or TokenizationEngine()
 
     def process(self, chunks: list[Chunk]) -> list[Chunk]:
         """Enrich chunk metadata with adjacency links and quality signals.
@@ -48,12 +55,20 @@ class ChunkPostProcessor:
     ) -> ChunkMetadata:
         """Copies metadata while wiring adjacency and computed quality fields."""
         payload = chunk.metadata.model_dump()
+        overlap_prev = self._has_textual_overlap(
+            previous_chunk=previous_chunk,
+            current_chunk=chunk,
+        )
+        overlap_next = self._has_textual_overlap(
+            previous_chunk=chunk,
+            current_chunk=next_chunk,
+        )
         payload["previous_chunk_id"] = (
             previous_chunk.chunk_id if previous_chunk else None
         )
         payload["next_chunk_id"] = next_chunk.chunk_id if next_chunk else None
-        payload["overlap_prev"] = previous_chunk is not None
-        payload["overlap_next"] = next_chunk is not None
+        payload["overlap_prev"] = overlap_prev
+        payload["overlap_next"] = overlap_next
         payload["chunk_quality_score"] = self._quality_score(metadata=chunk.metadata)
         payload["metadata"] = self._enriched_metadata(
             chunk=chunk,
@@ -62,6 +77,27 @@ class ChunkPostProcessor:
             quality_score=payload["chunk_quality_score"],
         )
         return ChunkMetadata.model_validate(payload)
+
+    def _has_textual_overlap(
+        self,
+        *,
+        previous_chunk: Chunk | None,
+        current_chunk: Chunk | None,
+    ) -> bool:
+        """Return whether adjacent chunks share an exact token boundary."""
+        if previous_chunk is None or current_chunk is None:
+            return False
+        previous_tokens = self.tokenization_engine.tokenize(previous_chunk.text)
+        current_tokens = self.tokenization_engine.tokenize(current_chunk.text)
+        limit = min(
+            len(previous_tokens),
+            len(current_tokens),
+            max(self.config.overlap_tokens, 1),
+        )
+        for size in range(limit, 0, -1):
+            if previous_tokens[-size:] == current_tokens[:size]:
+                return True
+        return False
 
     def _enriched_metadata(
         self,

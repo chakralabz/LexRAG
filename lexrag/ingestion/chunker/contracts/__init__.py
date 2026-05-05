@@ -1,4 +1,4 @@
-"""Compatibility shim for the chunker contract."""
+"""Contracts for chunking components."""
 
 from lexrag.ingestion.chunker.contracts.chunker import Chunker
 

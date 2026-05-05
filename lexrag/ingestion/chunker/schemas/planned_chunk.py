@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from pydantic import BaseModel, ConfigDict, Field
 
+from lexrag.ingestion.chunker.config.chunking_strategy import ChunkingStrategy
 from lexrag.ingestion.parser.schemas.parsed_block import ParsedBlock
 
 
@@ -20,7 +21,9 @@ class PlannedChunk(BaseModel):
     block: ParsedBlock = Field(description="Source parsed block.")
     text: str = Field(description="Trimmed block text used by builder logic.")
     token_count: int = Field(ge=0, description="Token count for sizing decisions.")
-    chunking_strategy: str = Field(description="Planner-selected strategy.")
+    chunking_strategy: ChunkingStrategy = Field(
+        description="Planner-selected strategy."
+    )
     standalone: bool = Field(description="Whether the block must remain isolated.")
     merge_with_next: bool = Field(description="Whether adjacent merge is allowed.")
     overlap_candidate: bool = Field(description="Whether boundary overlap is useful.")

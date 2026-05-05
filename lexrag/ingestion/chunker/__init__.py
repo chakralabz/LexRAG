@@ -12,36 +12,30 @@ from __future__ import annotations
 from importlib import import_module
 from typing import Any
 
-__all__ = [
-    "BaseChunker",
-    "Chunk",
-    "ChunkMetadata",
-    "ChunkModelFactory",
-    "Chunker",
-    "ChunkingConfig",
-    "FixedSizeChunker",
-    "PlannedChunkUnit",
-    "RawChunkPayload",
-    "SemanticChunker",
-    "SimilarityEngine",
-    "TokenContext",
-    "TokenizationEngine",
-]
-
 _EXPORTS: dict[str, tuple[str, str]] = {
-    "BaseChunker": (".base_chunker", "BaseChunker"),
+    "BaseChunker": (".strategies", "BaseChunker"),
     "Chunk": (".schemas", "Chunk"),
+    "ChunkerFactory": (".factories", "ChunkerFactory"),
+    "ChunkerKind": (".config", "ChunkerKind"),
     "ChunkMetadata": (".schemas.chunk_metadata", "ChunkMetadata"),
-    "ChunkingConfig": (".schemas.chunking_config", "ChunkingConfig"),
-    "Chunker": (".chunker", "Chunker"),
-    "ChunkModelFactory": (".chunk_model_factory", "ChunkModelFactory"),
-    "FixedSizeChunker": (".fixed_size_chunker", "FixedSizeChunker"),
+    "ChunkingPipeline": (".chunking_pipeline", "ChunkingPipeline"),
+    "ChunkingPipelineResult": (
+        ".chunking_pipeline_result",
+        "ChunkingPipelineResult",
+    ),
+    "ChunkingConfig": (".config", "ChunkingConfig"),
+    "ChunkingStrategy": (".config", "ChunkingStrategy"),
+    "ChunkType": (".config", "ChunkType"),
+    "Chunker": (".contracts", "Chunker"),
+    "ChunkModelFactory": (".factories", "ChunkModelFactory"),
+    "FixedSizeChunker": (".strategies", "FixedSizeChunker"),
+    "OversizedChunkStrategy": (".config", "OversizedChunkStrategy"),
     "PlannedChunkUnit": (".schemas.planned_chunk", "PlannedChunk"),
     "RawChunkPayload": (".schemas.raw_chunk_payload", "RawChunkPayload"),
-    "SemanticChunker": (".semantic_chunker", "SemanticChunker"),
-    "SimilarityEngine": (".chunk_similarity_engine", "SimilarityEngine"),
+    "SemanticChunker": (".strategies", "SemanticChunker"),
+    "SimilarityEngine": (".support", "SimilarityEngine"),
     "TokenContext": (".schemas.token_context", "TokenContext"),
-    "TokenizationEngine": (".tokenization_engine", "TokenizationEngine"),
+    "TokenizationEngine": (".support", "TokenizationEngine"),
 }
 
 

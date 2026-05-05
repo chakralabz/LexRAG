@@ -1,4 +1,4 @@
-"""Compatibility shim for the chunk builder."""
+"""Chunk builder components."""
 
 from lexrag.ingestion.chunker.builders.chunk_builder import ChunkBuilder
 
