@@ -9,7 +9,7 @@ from __future__ import annotations
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
-from lexrag.ingestion.parser.base_document_parser import BaseDocumentParser
+from lexrag.ingestion.parser.backends.base_document_parser import BaseDocumentParser
 from lexrag.ingestion.parser.builders import ParsedBlockBuilder
 from lexrag.ingestion.parser.ocr import (
     OCRExtractor,

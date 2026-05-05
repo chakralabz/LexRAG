@@ -7,8 +7,12 @@ document-level provenance onto every emitted block.
 
 from __future__ import annotations
 
-from lexrag.ingestion.parser.error_classification import classify_parse_error
-from lexrag.ingestion.parser.parse_confidence_scorer import ParseConfidenceScorer
+from lexrag.ingestion.parser.orchestration.error_classification import (
+    classify_parse_error,
+)
+from lexrag.ingestion.parser.orchestration.parse_confidence_scorer import (
+    ParseConfidenceScorer,
+)
 from lexrag.ingestion.parser.schemas.document_parse_result import DocumentParseResult
 from lexrag.ingestion.parser.schemas.parsed_block import ParsedBlock
 

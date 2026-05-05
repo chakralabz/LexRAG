@@ -80,14 +80,14 @@ caller path
 - Use this when you want the full parser workflow including file-loader
   integration and structured `DocumentParseResult`
 
-### `loaded_document_parser_pipeline.py`
+### `orchestration/loaded_document_parser_pipeline.py`
 
 - `LoadedDocumentParserPipeline`
 - Transition adapter from `FileLoadResult` to a terminal parser status
 - Converts low-level parser exceptions into stable statuses like
   `parsed`, `rejected`, `failed`, and `quarantined`
 
-### `parser_selection_strategy.py`
+### `orchestration/parser_selection_strategy.py`
 
 - `ParserSelectionStrategy`
 - Determines which backend order to try and why
@@ -101,7 +101,7 @@ caller path
   non-empty success
 - If fallback behavior feels wrong, inspect this file
 
-### `parser_provenance_annotator.py`
+### `orchestration/parser_provenance_annotator.py`
 
 - `ParserProvenanceAnnotator`
 - Attaches parser metadata and confidence to every final `ParsedBlock`
@@ -116,35 +116,34 @@ caller path
 | `__init__.py` | exports, `parse_document()` | Stable public API surface and legacy compatibility helper. |
 | `README.md` | package overview | Public-facing explanation of routing and parsing responsibilities. |
 | `DEV.md` | developer map | Internal orientation for maintainers. |
-| `base_document_parser.py` | `BaseDocumentParser` | Shared abstract base for parser backends. |
 | `document_parser_protocol.py` | `DocumentParserProtocol` | Structural contract for parser-like objects. |
-| `loaded_document_parser_pipeline.py` | `LoadedDocumentParserPipeline` | Converts file-loader outputs into parser terminal statuses. |
-| `parser_selection_strategy.py` | `ParserSelectionStrategy` | Deterministic route planner for backend order. |
-| `parser_provenance_annotator.py` | `ParserProvenanceAnnotator` | Adds provenance and confidence to final blocks. |
-| `parse_confidence_scorer.py` | `ParseConfidenceScorer` | Produces parse-confidence signals used in block metadata. |
-| `parsed_block_factory.py` | `ParsedBlockFactory` | Normalizes backend output into canonical `ParsedBlock` objects. |
-| `pymupdf_parser.py` | `PyMuPDFParser` | Lightweight parser/fallback path, especially useful outside Docling. |
-| `unstructured_parser.py` | `UnstructuredParser` | Secondary parser path for non-primary formats and fallback. |
-| `manual_recovery_parser.py` | `ManualRecoveryParser` | Explicit end-of-chain parser that signals automation exhaustion. |
-| `manual_recovery_required_error.py` | `ManualRecoveryRequiredError` | Dedicated exception to distinguish quarantine from generic failure. |
-| `error_classification.py` | error helpers | Maps parse failures into stable reason codes for attempt records. |
-| `html_text_extractor.py` | `HtmlTextExtractor` | HTML text extraction helper used by lightweight parser paths. |
 
 ### `orchestration/`
 
 | File | Main classes | Why it exists |
 | --- | --- | --- |
 | `orchestration/document_parser.py` | `DocumentParser` | Central parser orchestration entrypoint. |
+| `orchestration/loaded_document_parser_pipeline.py` | `LoadedDocumentParserPipeline` | Adapts `FileLoadResult` into terminal parser-stage results. |
+| `orchestration/parser_selection_strategy.py` | `ParserSelectionStrategy` | Deterministic route planner for backend order. |
 | `orchestration/parser_backend_registry.py` | `ParserBackendRegistry` | Lazily builds and returns backend instances by name. |
 | `orchestration/parser_chain_executor.py` | `ParserChainExecutor` | Executes the selected parser order and records attempts. |
+| `orchestration/parser_provenance_annotator.py` | `ParserProvenanceAnnotator` | Adds provenance and confidence to final blocks. |
+| `orchestration/parse_confidence_scorer.py` | `ParseConfidenceScorer` | Produces parse-confidence signals used in block metadata. |
+| `orchestration/error_classification.py` | error helpers | Maps parse failures into stable reason codes for attempt records. |
+| `orchestration/manual_recovery_required_error.py` | `ManualRecoveryRequiredError` | Distinguishes quarantine from generic parser failure. |
 | `orchestration/__init__.py` | exports | Keeps orchestration imports stable. |
 
 ### `backends/`
 
 | File | Main classes | Why it exists |
 | --- | --- | --- |
+| `backends/base_document_parser.py` | `BaseDocumentParser` | Shared abstract base for parser backends. |
 | `backends/docling_backend.py` | `DoclingParser` | Primary structured parser for native PDFs and rich layout extraction. |
 | `backends/ocr_only_backend.py` | `OCROnlyParser` | OCR-first parser for scanned/image-heavy documents. |
+| `backends/pymupdf_parser.py` | `PyMuPDFParser` | Lightweight parser/fallback path, especially useful outside Docling. |
+| `backends/unstructured_parser.py` | `UnstructuredParser` | Secondary parser path for non-primary formats and fallback. |
+| `backends/manual_recovery_parser.py` | `ManualRecoveryParser` | Explicit end-of-chain parser that signals automation exhaustion. |
+| `backends/html_text_extractor.py` | `HtmlTextExtractor` | HTML text extraction helper used by lightweight parser paths. |
 | `backends/__init__.py` | exports | Namespace convenience. |
 
 ### `docling/`
@@ -171,6 +170,7 @@ caller path
 
 | File | Main classes | Why it exists |
 | --- | --- | --- |
+| `builders/parsed_block_factory.py` | `ParsedBlockFactory` | Normalizes backend output into canonical `ParsedBlock` objects. |
 | `builders/parsed_block_builder.py` | `ParsedBlockBuilder` | Shared helper for constructing canonical parsed blocks safely. |
 | `builders/__init__.py` | exports | Namespace convenience. |
 
@@ -239,7 +239,7 @@ This section is the fastest way to answer "where should I change this?"
 Check in this order:
 
 1. upstream `file_ingestion` detection output
-2. `parser_selection_strategy.py`
+2. `orchestration/parser_selection_strategy.py`
 3. `schemas/parser_selection.py`
 
 Usually the bug is in route selection signals, not in the backend itself.
@@ -250,7 +250,7 @@ Start here:
 
 - `orchestration/parser_chain_executor.py`
 - `orchestration/parser_backend_registry.py`
-- `error_classification.py`
+- `orchestration/error_classification.py`
 
 Important rule: the first non-empty backend result wins. Later parsers do not
 get a chance to "improve" a successful earlier parse.
@@ -259,9 +259,9 @@ get a chance to "improve" a successful earlier parse.
 
 Start here:
 
-- `manual_recovery_parser.py`
-- `manual_recovery_required_error.py`
-- `loaded_document_parser_pipeline.py`
+- `backends/manual_recovery_parser.py`
+- `orchestration/manual_recovery_required_error.py`
+- `orchestration/loaded_document_parser_pipeline.py`
 
 Manual recovery is a distinct path, not a generic exception. The pipeline
 maps it to `quarantined`.
@@ -295,9 +295,9 @@ start cost is user-visible in services.
 
 Start here:
 
-- `parsed_block_factory.py`
+- `builders/parsed_block_factory.py`
 - `builders/parsed_block_builder.py`
-- `parser_provenance_annotator.py`
+- `orchestration/parser_provenance_annotator.py`
 - backend normalizers such as `docling/result_normalizer.py`
 
 Canonical output consistency should be fixed at normalization/build/provenance
@@ -307,8 +307,8 @@ layers instead of pushing backend-specific quirks downstream.
 
 Start here:
 
-- `parser_provenance_annotator.py`
-- `parse_confidence_scorer.py`
+- `orchestration/parser_provenance_annotator.py`
+- `orchestration/parse_confidence_scorer.py`
 - `schemas/parsed_block.py`
 - `schemas/document_parse_result.py`
 
@@ -397,12 +397,12 @@ Ask these questions:
 If you are new to this package, read these in order:
 
 1. `README.md`
-2. `loaded_document_parser_pipeline.py`
+2. `orchestration/loaded_document_parser_pipeline.py`
 3. `orchestration/document_parser.py`
-4. `parser_selection_strategy.py`
+4. `orchestration/parser_selection_strategy.py`
 5. `orchestration/parser_chain_executor.py`
-6. `parsed_block_factory.py`
-7. `parser_provenance_annotator.py`
+6. `builders/parsed_block_factory.py`
+7. `orchestration/parser_provenance_annotator.py`
 8. `schemas/document_parse_result.py`
 
 That sequence gives you the shortest path from "approved file" to

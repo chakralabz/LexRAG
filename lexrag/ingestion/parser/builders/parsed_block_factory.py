@@ -10,7 +10,7 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any
 
-from lexrag.ingestion.parser.builders import ParsedBlockBuilder
+from lexrag.ingestion.parser.builders.parsed_block_builder import ParsedBlockBuilder
 from lexrag.ingestion.parser.schemas.parsed_block import ParsedBlock
 
 

@@ -10,9 +10,9 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any
 
-from lexrag.ingestion.parser.base_document_parser import BaseDocumentParser
+from lexrag.ingestion.parser.backends.base_document_parser import BaseDocumentParser
 from lexrag.ingestion.parser.builders import ParsedBlockBuilder
-from lexrag.ingestion.parser.html_text_extractor import HtmlTextExtractor
+from lexrag.ingestion.parser.backends.html_text_extractor import HtmlTextExtractor
 from lexrag.ingestion.parser.schemas.parsed_block import ParsedBlock
 
 

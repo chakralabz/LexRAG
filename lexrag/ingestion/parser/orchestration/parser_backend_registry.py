@@ -11,14 +11,16 @@ from collections.abc import Callable
 from inspect import signature
 from typing import Any
 
-from lexrag.ingestion.parser.backends.docling_backend import DoclingParser
-from lexrag.ingestion.parser.backends.ocr_only_backend import OCROnlyParser
-from lexrag.ingestion.parser.base_document_parser import BaseDocumentParser
-from lexrag.ingestion.parser.manual_recovery_parser import ManualRecoveryParser
-from lexrag.ingestion.parser.pymupdf_parser import PyMuPDFParser
+from lexrag.ingestion.parser.backends import (
+    BaseDocumentParser,
+    DoclingParser,
+    ManualRecoveryParser,
+    OCROnlyParser,
+    PyMuPDFParser,
+    UnstructuredParser,
+)
 from lexrag.ingestion.parser.schemas.parser_backend import ParserBackend
 from lexrag.ingestion.parser.schemas.parser_config import ParserConfig
-from lexrag.ingestion.parser.unstructured_parser import UnstructuredParser
 
 
 class ParserBackendRegistry:

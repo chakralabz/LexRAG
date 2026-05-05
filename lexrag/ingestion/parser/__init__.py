@@ -5,10 +5,16 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any
 
-from .backends.docling_backend import DoclingParser
-from .backends.ocr_only_backend import OCROnlyParser
-from .base_document_parser import BaseDocumentParser
-from .builders import ParsedBlockBuilder
+from .backends import (
+    BaseDocumentParser,
+    DoclingParser,
+    HtmlTextExtractor,
+    ManualRecoveryParser,
+    OCROnlyParser,
+    PyMuPDFParser,
+    UnstructuredParser,
+)
+from .builders import ParsedBlockBuilder, ParsedBlockFactory
 from .docling import (
     DoclingConverterFactory,
     DoclingPipelineOptionsFactory,
@@ -16,8 +22,6 @@ from .docling import (
     DoclingRuntime,
 )
 from .document_parser_protocol import DocumentParserProtocol
-from .loaded_document_parser_pipeline import LoadedDocumentParserPipeline
-from .manual_recovery_required_error import ManualRecoveryRequiredError
 from .ocr import (
     OCRExtractor,
     OcrRuntimeValidator,
@@ -26,10 +30,14 @@ from .ocr import (
 )
 from .orchestration import (
     DocumentParser,
+    LoadedDocumentParserPipeline,
+    ManualRecoveryRequiredError,
+    ParseConfidenceScorer,
     ParserBackendRegistry,
     ParserChainExecutor,
+    ParserProvenanceAnnotator,
+    ParserSelectionStrategy,
 )
-from .pymupdf_parser import PyMuPDFParser
 from .schemas import (
     DoclingAcceleratorConfig,
     DoclingAcceleratorDevice,
@@ -52,7 +60,6 @@ from .schemas import (
     ParserSelection,
     RasterizedPage,
 )
-from .unstructured_parser import UnstructuredParser
 
 
 def parse_document(path: str | Path) -> list[dict[str, Any]]:
@@ -87,17 +94,21 @@ __all__ = [
     "DocumentParseResult",
     "DocumentParser",
     "DocumentParserProtocol",
+    "HtmlTextExtractor",
     "LoadedDocumentParserPipeline",
     "LoadedDocumentParseResult",
     "LoadedDocumentParseStatus",
+    "ManualRecoveryParser",
     "ManualRecoveryRequiredError",
     "OCRExtractor",
     "OCROnlyParser",
     "OCRTextBlock",
     "OcrRuntimeValidator",
     "ParseAttempt",
+    "ParseConfidenceScorer",
     "ParsedBlock",
     "ParsedBlockBuilder",
+    "ParsedBlockFactory",
     "ParsedPage",
     "ParserBackend",
     "ParserBackendRegistry",
@@ -106,6 +117,8 @@ __all__ = [
     "ParserOcrConfig",
     "ParserOcrEngine",
     "ParserPdfRoutingConfig",
+    "ParserProvenanceAnnotator",
+    "ParserSelectionStrategy",
     "ParserSelection",
     "PdfPageRasterizer",
     "PyMuPDFParser",

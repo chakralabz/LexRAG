@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from lexrag.ingestion.file_ingestion import FileLoadResult
-from lexrag.ingestion.parser.manual_recovery_required_error import (
+from lexrag.ingestion.parser.orchestration.manual_recovery_required_error import (
     ManualRecoveryRequiredError,
 )
 from lexrag.ingestion.parser.orchestration.document_parser import DocumentParser

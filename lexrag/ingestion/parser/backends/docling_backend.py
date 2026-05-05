@@ -10,7 +10,7 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any
 
-from lexrag.ingestion.parser.base_document_parser import BaseDocumentParser
+from lexrag.ingestion.parser.backends.base_document_parser import BaseDocumentParser
 from lexrag.ingestion.parser.builders import ParsedBlockBuilder
 from lexrag.ingestion.parser.docling import (
     DoclingConverterFactory,

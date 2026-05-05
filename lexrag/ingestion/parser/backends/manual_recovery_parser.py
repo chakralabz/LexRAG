@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from lexrag.ingestion.parser.base_document_parser import BaseDocumentParser
+from lexrag.ingestion.parser.backends.base_document_parser import BaseDocumentParser
 from lexrag.ingestion.parser.schemas.parsed_block import ParsedBlock
 
 

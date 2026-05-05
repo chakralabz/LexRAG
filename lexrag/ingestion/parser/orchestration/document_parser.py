@@ -18,13 +18,15 @@ from lexrag.ingestion.file_ingestion import (
     FileLoadResult,
     FileLoadService,
 )
-from lexrag.ingestion.parser.manual_recovery_required_error import (
+from lexrag.ingestion.parser.orchestration.manual_recovery_required_error import (
     ManualRecoveryRequiredError,
 )
-from lexrag.ingestion.parser.parser_provenance_annotator import (
+from lexrag.ingestion.parser.orchestration.parser_provenance_annotator import (
     ParserProvenanceAnnotator,
 )
-from lexrag.ingestion.parser.parser_selection_strategy import ParserSelectionStrategy
+from lexrag.ingestion.parser.orchestration.parser_selection_strategy import (
+    ParserSelectionStrategy,
+)
 from lexrag.ingestion.parser.schemas.document_parse_result import DocumentParseResult
 from lexrag.ingestion.parser.schemas.parsed_block import ParsedBlock
 from lexrag.ingestion.parser.schemas.parser_backend import ParserBackend

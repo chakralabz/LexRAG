@@ -10,8 +10,10 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any
 
-from lexrag.ingestion.parser.error_classification import classify_parse_error
-from lexrag.ingestion.parser.parsed_block_factory import ParsedBlockFactory
+from lexrag.ingestion.parser.builders.parsed_block_factory import ParsedBlockFactory
+from lexrag.ingestion.parser.orchestration.error_classification import (
+    classify_parse_error,
+)
 from lexrag.ingestion.parser.schemas.document_parse_result import DocumentParseResult
 from lexrag.ingestion.parser.schemas.parse_attempt import ParseAttempt
 from lexrag.ingestion.parser.schemas.parser_backend import ParserBackend
