@@ -1,0 +1,12 @@
+name: Eval Gate
+
+on:
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  eval:
+    runs-on: ubuntu-latest
+    steps:
+      - name: TODO
+        run: echo "Eval gate activated in Phase 1, Commit 1.7"

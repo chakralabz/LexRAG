@@ -1,12 +1,28 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "lexrag"
 version = "0.1.0"
-description = "LexRAG phased build"
+description = "Reusable enterprise RAG platform SDK for ingestion and retrieval"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
-  "pydantic==2.13.0",
+  "ipykernel>=7.2.0",
+  "jupyterlab>=4.5.7",
+  "docling>=2.92.0",
+  "pydantic==2.13.1",
+  "pydantic-settings==2.13.1",
+  "python-dotenv==1.2.2",
+  "PyYAML>=6.0.2,<7",
 ]
+
+[project.scripts]
+lexrag = "main:main"
+
+[tool.setuptools.packages.find]
+include = ["lexrag*"]
 
 [project.optional-dependencies]
 dev = [
@@ -20,6 +36,10 @@ dev = [
 pythonpath = ["."]
 addopts = "-ra"
 testpaths = ["tests"]
+markers = [
+  "integration: tests that exercise multi-component flows",
+  "slow: tests that load larger models or run long integration paths",
+]
 
 [tool.ruff]
 line-length = 88

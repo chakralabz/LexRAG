@@ -1,0 +1,1 @@
+"""Chunking benchmark placeholder."""

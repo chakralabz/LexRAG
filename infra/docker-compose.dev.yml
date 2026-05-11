@@ -1,0 +1,17 @@
+services:
+  qdrant:
+    volumes:
+      - qdrant_data:/qdrant/storage
+
+  elasticsearch:
+    volumes:
+      - elastic_data:/usr/share/elasticsearch/data
+
+  redis:
+    volumes:
+      - redis_data:/data
+
+volumes:
+  qdrant_data:
+  elastic_data:
+  redis_data:

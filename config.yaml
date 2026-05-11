@@ -1,0 +1,51 @@
+# Shared, non-secret defaults (checked into git).
+# Environment-specific and secret values must live in env/.env.
+
+logging:
+  level: INFO
+  format: text
+
+models:
+  embed_model: BAAI/bge-m3
+  rerank_model: cross-encoder/ms-marco-MiniLM-L-12-v2
+  nli_model: cross-encoder/nli-deberta-v3-base
+  llm_model: Qwen/Qwen2.5-7B-Instruct
+
+infra:
+  qdrant_url: http://localhost:6333
+  qdrant_collection: lexrag_chunks
+  elasticsearch_url: http://localhost:9200
+  elasticsearch_index: lexrag_chunks
+  redis_url: redis://localhost:6379/0
+
+observability:
+  langfuse_host: http://localhost:3001
+
+retrieval:
+  alpha: 0.5
+  rerank_top_k: 5
+  top_n: 20
+
+ingestion:
+  min_chunk_tokens: 128
+  max_chunk_tokens: 512
+  semantic_chunk_threshold: 0.75
+  embed_batch_size: 32
+
+generation:
+  faithfulness_contradiction_threshold: 0.5
+  faithfulness_neutral_ratio_threshold: 0.3
+
+cache:
+  similarity_threshold: 0.9
+  ttl_seconds: 3600
+
+api:
+  rate_limit_per_minute: 60
+
+paths:
+  ingest_input_dir: data/arxiv/raw
+  eval_dataset_path: data/arxiv/qa_pairs.json
+  eval_results_dir: eval/results
+  testcase_dataset_path: data/arxiv/testcases/qa_pairs_ci.json
+  testcase_results_dir: eval/testcase_results
